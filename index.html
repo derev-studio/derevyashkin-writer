@@ -155,6 +155,10 @@
   .chat-input button{padding:8px 16px;font-size:0.7rem}
   .chat-widget.collapsed .chat-body{display:none}
   .chat-widget.collapsed .chat-toggle{transform:rotate(180deg)}
+  
+  /* МОБИЛЬНЫЙ ЧАТ */
+  .chat-mobile-bar{display:none;position:fixed;bottom:20px;right:20px;z-index:295;background:var(--a1);color:var(--bt);padding:8px 16px;border-radius:20px;cursor:pointer;font-size:0.7rem;box-shadow:0 4px 12px rgba(0,0,0,0.3);animation:pulse 2s infinite}
+  .chat-mobile-bar:hover{transform:scale(1.05)}
 
   /* FOOTER */
   footer{border-top:1px solid var(--brd);padding:32px 40px;text-align:center;color:var(--mu);font-size:0.76rem;letter-spacing:0.05em;background:var(--bg);transition:background 1.2s,border-color 1s}
@@ -178,12 +182,14 @@
     .mclose{top:6px;right:6px}
     .sbox{padding:32px 20px}
     .theme-sw{bottom:16px;right:16px}
-    .chat-widget{right:10px;bottom:60px;width:calc(100vw - 40px);max-width:320px}
+    .chat-widget{display:none;right:10px;bottom:60px;width:calc(100vw - 40px);max-width:320px}
+    .chat-mobile-bar{display:block}
   }
   @media(max-width:480px){
     .bgrid{grid-template-columns:repeat(2,1fr);gap:11px}
     h1{font-size:2.3rem}
     .chat-widget{width:calc(100vw - 20px);right:10px}
+    .chat-mobile-bar{bottom:30px;right:15px}
   }
 </style>
 </head>
@@ -204,6 +210,7 @@
     <a href="#news">Новости</a>
     <a href="#support">Поддержка</a>
     <a href="#contact">Контакты</a>
+    <a href="admin.html" class="nav-admin" style="display:none">🔐 Админка</a>
     <a href="https://ko-fi.com/X8X71WAGRF" target="_blank" class="nav-kofi">☕ Ko-fi</a>
   </nav>
 </header>
@@ -324,6 +331,7 @@
 </section>
 
 <!-- ЧАТ С ЧИТАТЕЛЯМИ -->
+<div class="chat-mobile-bar" id="chatMobileBar" onclick="openMobileChat()">💬 Чат</div>
 <div class="chat-widget" id="chatWidget">
   <div class="chat-header" onclick="toggleChat()">
     <span>💬 Чат с читателями</span>
@@ -504,12 +512,52 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
 render();
 
+// АДМИНКА
+// Показать админку только на компьютерах
+if(window.innerWidth>768){
+  document.querySelector('.nav-admin').style.display='inline-block';
+}
+
+// Секретная комбинация для показа админки на мобильных
+let secretCode = '';
+document.addEventListener('keypress', (e) => {
+  secretCode += e.key;
+  if(secretCode.includes('admin123')){
+    document.querySelector('.nav-admin').style.display='inline-block';
+    showNotification('Админка разблокирована! 🔓');
+    secretCode = '';
+  }
+  if(secretCode.length > 10) secretCode = secretCode.slice(-10);
+});
+
+function showNotification(msg) {
+  const div = document.createElement('div');
+  div.style.cssText = 'position:fixed;top:20px;right:20px;background:var(--a1);color:var(--bt);padding:12px 20px;border-radius:4px;z-index:1000;animation:fadeUp 0.3s ease';
+  div.textContent = msg;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 3000);
+}
+
 // ЧАТ
+function openMobileChat(){
+  document.getElementById('chatMobileBar').style.display='none';
+  document.getElementById('chatWidget').style.display='block';
+  document.getElementById('chatWidget').classList.remove('collapsed');
+}
+
 function toggleChat(){
   const widget=document.getElementById('chatWidget');
   const toggle=document.getElementById('chatToggle');
   widget.classList.toggle('collapsed');
   toggle.textContent=widget.classList.contains('collapsed')?'▼':'▲';
+  
+  // На мобильных: если закрываем, показываем полоску
+  if(window.innerWidth<=768 && widget.classList.contains('collapsed')){
+    setTimeout(()=>{
+      widget.style.display='none';
+      document.getElementById('chatMobileBar').style.display='block';
+    },300);
+  }
 }
 
 function sendMessage(){
@@ -529,24 +577,18 @@ function sendMessage(){
   input.value='';
   messages.scrollTop=messages.scrollHeight;
   
-  // Имитация ответа бота
+  // Уведомление о новом сообщении
+  showNotification('📨 Новое сообщение в чате!');
+  
+  // Имитация ответа автора (теперь можешь отвечать сам)
   setTimeout(()=>{
-    const responses=[
-      "Спасибо за ваше сообщение! Александр обязательно прочитает его.",
-      "Интересный вопрос! Попробуйте прочитать книгу 'Танец под звёздами'.",
-      "Благодарю за интерес к творчеству! Новые книги уже в пути.",
-      "Подписывайтесь на обновления, чтобы первыми узнавать о новинках!",
-      "Вы можете найти все книги на ЛитРес и Author.Today."
-    ];
-    const response=responses[Math.floor(Math.random()*responses.length)];
-    
     messages.innerHTML+=`
       <div class="chat-message bot">
-        <span class="msg-author">🤖 Ассистент</span>
-        <span class="msg-text">${response}</span>
+        <span class="msg-author">✍️ Александр</span>
+        <span class="msg-text">Спасибо за сообщение! Читаю и отвечу в ближайшее время. Вы также можете написать мне напрямую через ЛитРес или Author.Today.</span>
       </div>`;
     messages.scrollTop=messages.scrollHeight;
-  },1000);
+  },1500);
 }
 </script>
 </body>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админка - Александр Деревяшкин</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  [data-theme="light"]  { --bg:#faf8f5;--bg2:#f5f2ed;--bg3:#ede8e0;--a1:#8b5cf6;--a2:#a78bfa;--adim:rgba(139,92,246,0.08);--brd:rgba(139,92,246,0.15);--tx:#2d3748;--mu:#718096;--glow:rgba(139,92,246,0.05);--bt:#faf8f5; }
+  [data-theme="dark"]   { --bg:#0d0c0a;--bg2:#141210;--bg3:#1a1714;--a1:#c9a84c;--a2:#e8c97a;--adim:rgba(201,168,76,0.13);--brd:rgba(201,168,76,0.18);--tx:#e8e0d0;--mu:#8a7f6e;--glow:rgba(201,168,76,0.07);--bt:#0d0c0a; }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--tx);font-family:'Jost',sans-serif;font-weight:300;line-height:1.7;min-height:100vh;padding:20px}
+
+  .container{max-width:800px;margin:0 auto}
+  h1{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--tx);margin-bottom:20px;text-align:center}
+  
+  .form-section{background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:24px;margin-bottom:20px}
+  .form-group{margin-bottom:16px}
+  label{display:block;color:var(--mu);font-size:0.8rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em}
+  input,textarea,select{width:100%;background:var(--bg3);border:1px solid var(--brd);color:var(--tx);padding:10px 12px;border-radius:4px;font-family:inherit;font-size:0.9rem}
+  textarea{min-height:120px;resize:vertical}
+  
+  .btn{padding:10px 20px;background:var(--a1);color:var(--bt);border:none;border-radius:4px;font-weight:500;cursor:pointer;transition:all 0.3s;text-transform:uppercase;letter-spacing:0.05em;font-size:0.8rem}
+  .btn:hover{background:var(--a2);transform:translateY(-1px)}
+  
+  .success{background:#10b981;color:white;padding:12px;border-radius:4px;margin-bottom:16px}
+  .error{background:#ef4444;color:white;padding:12px;border-radius:4px;margin-bottom:16px}
+  
+  .works-list{display:grid;gap:16px}
+  .work-item{background:var(--bg3);border:1px solid var(--brd);padding:16px;border-radius:4px;display:flex;justify-content:space-between;align-items:center}
+  .work-info h3{color:var(--tx);margin-bottom:4px}
+  .work-info p{color:var(--mu);font-size:0.8rem}
+  .work-actions{display:flex;gap:8px}
+  .btn-small{padding:6px 12px;font-size:0.7rem}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>📝 Админка</h1>
+  
+  <div class="form-section">
+    <h2>Добавить произведение</h2>
+    <form id="workForm">
+      <div class="form-group">
+        <label for="title">Название</label>
+        <input type="text" id="title" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="genre">Жанр</label>
+        <select id="genre">
+          <option value="Романтика">Романтика</option>
+          <option value="Проза">Проза</option>
+          <option value="Психология">Психология</option>
+          <option value="Приключения">Приключения</option>
+          <option value="Юмор">Юмор</option>
+          <option value="Фантастика">Фантастика</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Описание</label>
+        <textarea id="description" required></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="cover">Обложка (URL)</label>
+        <input type="url" id="cover" placeholder="https://...">
+      </div>
+      
+      <div class="form-group">
+        <label for="link">Ссылка на чтение</label>
+        <input type="url" id="link" placeholder="https://...">
+      </div>
+      
+      <div class="form-group">
+        <label for="free">Бесплатное произведение</label>
+        <select id="free">
+          <option value="false">Нет</option>
+          <option value="true">Да</option>
+        </select>
+      </div>
+      
+      <button type="submit" class="btn">Добавить произведение</button>
+    </form>
+  </div>
+
+  <div class="form-section">
+    <h2>Мои произведения</h2>
+    <div class="works-list" id="worksList">
+      <!-- Произведения будут загружаться сюда -->
+    </div>
+  </div>
+</div>
+
+<script>
+// Загрузка произведений из localStorage
+function loadWorks() {
+  const works = JSON.parse(localStorage.getItem('myWorks') || '[]');
+  const list = document.getElementById('worksList');
+  
+  if (works.length === 0) {
+    list.innerHTML = '<p style="color: var(--mu); text-align: center;">Пока нет произведений</p>';
+    return;
+  }
+  
+  list.innerHTML = works.map((work, index) => `
+    <div class="work-item">
+      <div class="work-info">
+        <h3>${work.title}</h3>
+        <p>${work.genre} • ${work.free ? 'Бесплатно' : 'Платно'}</p>
+      </div>
+      <div class="work-actions">
+        <button class="btn btn-small" onclick="editWork(${index})">Редактировать</button>
+        <button class="btn btn-small" style="background: #ef4444" onclick="deleteWork(${index})">Удалить</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Добавление произведения
+document.getElementById('workForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const work = {
+    title: document.getElementById('title').value,
+    genre: document.getElementById('genre').value,
+    description: document.getElementById('description').value,
+    cover: document.getElementById('cover').value,
+    link: document.getElementById('link').value,
+    free: document.getElementById('free').value === 'true',
+    date: new Date().toLocaleDateString('ru-RU')
+  };
+  
+  const works = JSON.parse(localStorage.getItem('myWorks') || '[]');
+  works.push(work);
+  localStorage.setItem('myWorks', JSON.stringify(works));
+  
+  // Показать уведомление
+  showNotification('Произведение добавлено!', 'success');
+  
+  // Очистить форму
+  this.reset();
+  
+  // Обновить список
+  loadWorks();
+});
+
+// Удаление произведения
+function deleteWork(index) {
+  if (confirm('Удалить это произведение?')) {
+    const works = JSON.parse(localStorage.getItem('myWorks') || '[]');
+    works.splice(index, 1);
+    localStorage.setItem('myWorks', JSON.stringify(works));
+    loadWorks();
+    showNotification('Произведение удалено', 'success');
+  }
+}
+
+// Показ уведомлений
+function showNotification(message, type) {
+  const div = document.createElement('div');
+  div.className = type;
+  div.textContent = message;
+  document.querySelector('.container').insertBefore(div, document.querySelector('.form-section'));
+  
+  setTimeout(() => div.remove(), 3000);
+}
+
+// Начальная загрузка
+loadWorks();
+</script>
+
+</body>
+</html>
