@@ -73,6 +73,11 @@
   h2 em{font-style:italic;color:var(--a2);transition:color 1s}
   .ssub{margin-top:13px;color:var(--mu);font-size:0.86rem;max-width:480px;margin-inline:auto}
 
+  /* BOOK SEARCH */
+  .book-search{max-width:620px;margin:0 auto 22px;position:relative}
+  .book-search input{width:100%;padding:13px 18px;background:var(--bg3);color:var(--tx);border:1px solid var(--brd);border-radius:2px;font-family:'Jost',sans-serif;font-size:.88rem;outline:none;transition:border-color .25s,box-shadow .25s}
+  .book-search input:focus{border-color:var(--a1);box-shadow:0 0 0 3px var(--adim)}
+  .book-search input::placeholder{color:var(--mu)}
   /* BOOKS */
   #books{background:var(--bg2)}
   .fbar{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
@@ -257,9 +262,11 @@
   </div>
   <div class="fbar" style="margin-bottom:18px">
     <a class="btn-p" href="https://www.litres.ru/series/psihologiya-aleksandra-derevyashkina-850096/" target="_blank" rel="noopener">🧠 Серия «Психология Александра Деревяшкина» — 4 книги</a>
-    <a class="btn-o" href="https://www.litres.ru/author/aleksandr-derevyashkin-32679463/" target="_blank" rel="noopener">📚 Все 70+ книг на ЛитРес →</a>
   </div>
-  <p class="ssub" style="text-align:center;margin-bottom:24px">Ниже можно быстро отобрать книги по темам.</p>
+  <p class="ssub" style="text-align:center;margin-bottom:24px">Ниже можно быстро найти книгу или отобрать книги по темам.</p>
+  <div class="book-search">
+    <input id="bookSearch" type="search" placeholder="🔎 Найти книгу по названию или теме…" oninput="searchBooks(this.value)" aria-label="Поиск книг">
+  </div>
   <div class="fbar">
     <button class="fbtn act" onclick="filterBooks('all',this)">Все</button>
     <button class="fbtn" onclick="filterBooks('free',this)">🆓 Бесплатные</button>
@@ -270,7 +277,6 @@
     <button class="fbtn" onclick="filterBooks('Юмор',this)">Юмор</button>
   </div>
   <div class="bgrid" id="booksGrid"></div>
-  <div class="lmore"><button class="btn-o" id="loadMoreBtn" onclick="loadMore()" style="display:none">Загрузить ещё ↓</button></div>
 </section>
 
 <section id="news">
@@ -457,25 +463,29 @@ const BASE="https://cdn.litres.ru/pub/c/cover_h400/";
 const LITRES="https://www.litres.ru/book/aleksandr-derevyashkin-32679463/";
 const st=r=>{const s=Math.round(r);return'★'.repeat(s)+'☆'.repeat(5-s)};
 
-let cf='all',vc=18;
+let cf='all',bookQuery='';
 
 function filterBooks(f,btn){
-  cf=f;vc=18;
+  cf=f;
   document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('act'));
   btn.classList.add('act');
   render();
 }
 
 function getFilt(){
-  if(cf==='all') return B;
-  if(cf==='free') return B.filter(b=>b.f);
-  return B.filter(b=>b.g===cf);
+  let list=cf==='all'?B:(cf==='free'?B.filter(b=>b.f):B.filter(b=>b.g===cf));
+  if(bookQuery){
+    const q=bookQuery.toLowerCase();
+    list=list.filter(b=>(b.t+' '+b.g+' '+b.d).toLowerCase().includes(q));
+  }
+  return list;
 }
+function searchBooks(q){bookQuery=q.trim();render();}
 
 function render(){
   const grid=document.getElementById('booksGrid');
   const filt=getFilt();
-  const show=filt.slice(0,vc);
+  const show=filt;
   grid.innerHTML=show.map((b,i)=>`
     <div class="bcard" style="animation-delay:${(i%6)*0.06}s" onclick="openM(${B.indexOf(b)})">
       <div class="bcover">
@@ -490,10 +500,8 @@ function render(){
         <div class="brating">${st(b.r)} ${b.r} (${b.v})</div>
       </div>
     </div>`).join('');
-  document.getElementById('loadMoreBtn').style.display=filt.length>vc?'inline-flex':'none';
 }
 
-function loadMore(){vc+=12;render();}
 
 function openM(i){
   const b=B[i];
