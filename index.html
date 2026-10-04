@@ -82,6 +82,24 @@
   .lang-tab{padding:10px 15px;border:0;border-right:1px solid var(--brd);background:transparent;color:var(--tx);font-family:'Jost',sans-serif;font-size:.82rem;cursor:pointer;text-decoration:none}
   .lang-tab:hover,.lang-tab.active{color:var(--a2);background:var(--adim)}
   .lang-tab:last-child{border-right:0}
+
+  .world-books{padding:72px 22px 48px;background:linear-gradient(180deg,var(--bg2),var(--bg))}
+  .world-intro{max-width:980px;margin:0 auto 28px;text-align:center}
+  .world-intro h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,4rem);margin:8px 0 12px}
+  .world-intro p{max-width:760px;margin:auto;color:var(--muted);line-height:1.7}
+  .world-langs{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;max-width:1100px;margin:28px auto}
+  .world-langs a,.world-langs span{padding:10px 14px;border:1px solid var(--brd);border-radius:999px;color:var(--tx);text-decoration:none;font-size:.82rem}
+  .world-langs a:hover{border-color:var(--a1);color:var(--a2)}
+  .world-langs .soon{opacity:.5}
+  .edition-grid{max-width:1100px;margin:28px auto 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .edition{border:1px solid var(--brd);background:var(--bg2);padding:22px;border-radius:14px}
+  .edition .elang{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--a2);margin-bottom:9px}
+  .edition h3{font-family:'Cormorant Garamond',serif;font-size:1.75rem;margin:0 0 5px}
+  .edition .ru-note{color:var(--muted);font-size:.86rem;margin-bottom:16px}
+  .stores{display:flex;flex-wrap:wrap;gap:8px}
+  .stores a{padding:9px 12px;border:1px solid var(--brd);border-radius:8px;text-decoration:none;color:var(--tx);font-size:.78rem}
+  .stores a:hover{border-color:var(--a1);color:var(--a2)}
+
   /* BOOKS */
   #books{background:var(--bg2)}
   .series-strip{max-width:1160px;margin-left:auto;margin-right:auto;padding:8px;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd)}
@@ -260,18 +278,48 @@
   <div class="scroll-hint">Листать</div>
 </section>
 
-<nav class="lang-strip" aria-label="Языки книг">
-  <a class="lang-tab active" href="#books">🇷🇺 Русский</a>
-  <a class="lang-tab" href="#international">🇬🇧 English</a>
-  <a class="lang-tab" href="#international">🇮🇱 עברית</a>
-  <a class="lang-tab" href="#international">🇺🇦 Українська</a>
-  <a class="lang-tab" href="#international">🇸🇦 العربية</a>
-  <a class="lang-tab" href="#international">🇨🇳 中文</a>
-  <a class="lang-tab" href="#international">🇪🇸 Español</a>
-  <a class="lang-tab" href="#international">🇫🇷 Français</a>
-  <a class="lang-tab" href="#international">🇩🇪 Deutsch</a>
-  <a class="lang-tab" href="#international">🇯🇵 日本語</a>
-</nav>
+<section id="world-books" class="world-books">
+  <div class="world-intro">
+    <span class="slbl">Books Without Borders · Книги без границ</span>
+    <h2>Читайте книги <em>на своём языке</em></h2>
+    <p>Дорогие читатели со всего мира! Здесь собраны отдельные языковые издания книг Александра Деревяшкина. Это не машинный перевод сайта: выбирайте язык книги и переходите в проверенный книжный магазин.</p>
+  </div>
+  <div class="world-langs" aria-label="Языковые издания">
+    <a href="#books">🇷🇺 Русский · 70+ книг</a>
+    <a href="#english-books">🇬🇧 English</a>
+    <a href="#hebrew-books">🇮🇱 עברית</a>
+    <span class="soon">🇺🇦 Українська · готовится</span>
+    <span class="soon">🇨🇳 中文 · проверяем</span>
+    <span class="soon">🇪🇸 Español</span>
+    <span class="soon">🇫🇷 Français</span>
+    <span class="soon">🇩🇪 Deutsch</span>
+    <span class="soon">🇯🇵 日本語</span>
+    <span class="soon">🇸🇦 العربية</span>
+  </div>
+  <div class="edition-grid">
+    <article class="edition" id="english-books">
+      <div class="elang">🇬🇧 English edition</div>
+      <h3>Purring</h3>
+      <div class="ru-note">«Мурлыканье» · английское издание</div>
+      <div class="stores"><a href="https://www.kobo.com/tr/tr/ebook/purring" target="_blank" rel="noopener">Kobo →</a></div>
+    </article>
+    <article class="edition">
+      <div class="elang">🇬🇧 English edition</div>
+      <h3>JUPITER IS ANGRY</h3>
+      <div class="ru-note">Английское издание · EPUB3 · ISBN 1230009345041</div>
+      <div class="stores">
+        <a href="https://www.indigo.ca/en-ca/jupiter-is-angry/a0c40da2-f5fd-38bc-bf45-7930e62609db.html" target="_blank" rel="noopener">Kobo / Indigo →</a>
+        <a href="https://www.bol.com/be/en/p/jupiter-is-angry/9300000239799208/" target="_blank" rel="noopener">bol Europe →</a>
+      </div>
+    </article>
+    <article class="edition" id="hebrew-books">
+      <div class="elang">🇮🇱 מהדורה בעברית · Hebrew edition</div>
+      <h3>מגרגרים</h3>
+      <div class="ru-note">Издание на иврите · проверяем прямую страницу магазина</div>
+      <div class="stores"><span style="color:var(--muted);font-size:.78rem">Ссылка появится только после проверки</span></div>
+    </article>
+  </div>
+</section>
 
 <section id="books">
   <div class="shd">
@@ -322,31 +370,6 @@
       <p>Моя книга получила отличные отзывы читателей. Рады, что история любви нашла отклик в ваших сердцах!</p>
       <a href="#" class="btn-o">Читать отзывы →</a>
     </article>
-  </div>
-</section>
-
-<section id="international">
-  <div class="shd">
-    <span class="slbl">Worldwide</span>
-    <h2>Книги <em>для международных читателей</em></h2>
-    <p class="ssub">Издания Александра Деревяшкина на других языках и в международных книжных магазинах.</p>
-  </div>
-  <div class="cgrid">
-    <a href="https://www.kobo.com/tr/tr/ebook/purring" target="_blank" rel="noopener" class="ccard">
-      <span class="cicon">🇬🇧</span>
-      <div class="cname">Purring</div>
-      <div class="cdesc">English · EPUB · Kobo · Бесплатно</div>
-    </a>
-    <a href="https://www.indigo.ca/en-ca/jupiter-is-angry/a0c40da2-f5fd-38bc-bf45-7930e62609db.html" target="_blank" rel="noopener" class="ccard">
-      <span class="cicon">🌍</span>
-      <div class="cname">JUPITER IS ANGRY</div>
-      <div class="cdesc">English · Kobo eBook · Indigo Canada</div>
-    </a>
-    <a href="https://www.bol.com/be/en/p/jupiter-is-angry/9300000239799208/" target="_blank" rel="noopener" class="ccard">
-      <span class="cicon">🇪🇺</span>
-      <div class="cname">JUPITER IS ANGRY</div>
-      <div class="cdesc">English · EPUB · bol Europe</div>
-    </a>
   </div>
 </section>
 
