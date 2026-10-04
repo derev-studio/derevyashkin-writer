@@ -80,6 +80,9 @@
   .book-search input::placeholder{color:var(--mu)}
   /* BOOKS */
   #books{background:var(--bg2)}
+  .series-strip{max-width:1160px;margin-left:auto;margin-right:auto;padding:8px;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd)}
+  .series-strip .fbtn{border:0;border-right:1px solid var(--brd);border-radius:0}
+  .series-strip .fbtn:last-child{border-right:0}
   .fbar{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
   .fbtn{padding:6px 17px;background:transparent;color:var(--mu);border:1px solid var(--brd);border-radius:2px;font-family:'Jost',sans-serif;font-size:0.74rem;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;transition:all 0.25s}
   .fbtn:hover,.fbtn.act{background:var(--adim);color:var(--a2);border-color:var(--a1)}
@@ -259,21 +262,18 @@
     <h2>Мои <em>книги</em></h2>
     <p class="ssub">Нажмите на обложку — откроется описание и кнопка «Читать»</p>
   </div>
-  <div class="fbar" style="margin-bottom:18px">
-    <a class="btn-p" href="https://www.litres.ru/series/psihologiya-aleksandra-derevyashkina-850096/" target="_blank" rel="noopener">🧠 Серия «Психология Александра Деревяшкина» — 4 книги</a>
-  </div>
-  <p class="ssub" style="text-align:center;margin-bottom:24px">Ниже можно быстро найти книгу или отобрать книги по темам.</p>
   <div class="book-search">
     <input id="bookSearch" type="search" placeholder="🔎 Найти книгу по названию или теме…" oninput="searchBooks(this.value)" aria-label="Поиск книг">
   </div>
-  <div class="fbar">
+  <div class="fbar series-strip">
     <button class="fbtn act" onclick="filterBooks('all',this)">Все</button>
-    <button class="fbtn" onclick="filterBooks('free',this)">🆓 Бесплатные</button>
-    <button class="fbtn" onclick="filterBooks('Романтика',this)">Романтика</button>
+    <button class="fbtn" onclick="filterBooks('rating',this)">⭐ Лучшие по рейтингу</button>
     <button class="fbtn" onclick="filterBooks('Психология',this)">Психология</button>
+    <button class="fbtn" onclick="filterBooks('Романтика',this)">Романтика</button>
     <button class="fbtn" onclick="filterBooks('Приключения',this)">Приключения</button>
     <button class="fbtn" onclick="filterBooks('Проза',this)">Проза</button>
     <button class="fbtn" onclick="filterBooks('Юмор',this)">Юмор</button>
+    <button class="fbtn" onclick="filterBooks('free',this)">Бесплатные</button>
   </div>
   <div class="bgrid" id="booksGrid"></div>
 </section>
@@ -472,7 +472,7 @@ function filterBooks(f,btn){
 }
 
 function getFilt(){
-  let list=cf==='all'?B:(cf==='free'?B.filter(b=>b.f):B.filter(b=>b.g===cf));
+  let list=cf==='all'?B:(cf==='free'?B.filter(b=>b.f):(cf==='rating'?[...B].sort((a,b)=>b.r-a.r||b.v-a.v):B.filter(b=>b.g===cf)));
   if(bookQuery){
     const q=bookQuery.toLowerCase();
     list=list.filter(b=>(b.t+' '+b.g+' '+b.d).toLowerCase().includes(q));
