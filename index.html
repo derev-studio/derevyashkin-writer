@@ -78,6 +78,10 @@
   .book-search input{width:100%;padding:13px 18px;background:var(--bg3);color:var(--tx);border:1px solid var(--brd);border-radius:2px;font-family:'Jost',sans-serif;font-size:.88rem;outline:none;transition:border-color .25s,box-shadow .25s}
   .book-search input:focus{border-color:var(--a1);box-shadow:0 0 0 3px var(--adim)}
   .book-search input::placeholder{color:var(--mu)}
+  .lang-strip{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;max-width:1160px;margin:0 auto 34px;padding:10px;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd)}
+  .lang-tab{padding:10px 15px;border:0;border-right:1px solid var(--brd);background:transparent;color:var(--tx);font-family:'Jost',sans-serif;font-size:.82rem;cursor:pointer;text-decoration:none}
+  .lang-tab:hover,.lang-tab.active{color:var(--a2);background:var(--adim)}
+  .lang-tab:last-child{border-right:0}
   /* BOOKS */
   #books{background:var(--bg2)}
   .series-strip{max-width:1160px;margin-left:auto;margin-right:auto;padding:8px;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd)}
@@ -255,6 +259,15 @@
   </div>
   <div class="scroll-hint">Листать</div>
 </section>
+
+<nav class="lang-strip" aria-label="Языки книг">
+  <a class="lang-tab active" href="#books">🇷🇺 Русский</a>
+  <a class="lang-tab" href="#international">🇬🇧 English</a>
+  <a class="lang-tab" href="#international">🇮🇱 עברית</a>
+  <a class="lang-tab" href="#international">🇺🇦 Українська</a>
+  <a class="lang-tab" href="#international">🇸🇦 العربية</a>
+  <a class="lang-tab" href="#international">🇨🇳 中文</a>
+</nav>
 
 <section id="books">
   <div class="shd">
