@@ -222,7 +222,6 @@
     <a href="#news">Новости</a>
     <a href="#support">Поддержка</a>
     <a href="#contact">Контакты</a>
-    <a href="admin.html" class="nav-admin" style="display:none">🔐 Админка</a>
     <a href="https://ko-fi.com/X8X71WAGRF" target="_blank" class="nav-kofi">☕ Ko-fi</a>
   </nav>
 </header>
@@ -532,23 +531,6 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
 render();
 
-// АДМИНКА
-// Показать админку только на компьютерах
-if(window.innerWidth>768){
-  document.querySelector('.nav-admin').style.display='inline-block';
-}
-
-// Секретная комбинация для показа админки на мобильных
-let secretCode = '';
-document.addEventListener('keypress', (e) => {
-  secretCode += e.key;
-  if(secretCode.includes('admin123')){
-    document.querySelector('.nav-admin').style.display='inline-block';
-    showNotification('Админка разблокирована! 🔓');
-    secretCode = '';
-  }
-  if(secretCode.length > 10) secretCode = secretCode.slice(-10);
-});
 
 function showNotification(msg) {
   const div = document.createElement('div');
