@@ -232,6 +232,7 @@
     .chat-widget{width:calc(100vw - 20px);right:10px}
     .chat-mobile-bar{bottom:30px;right:15px}
   }
+.series-catalog{display:flex;flex-direction:column;gap:42px}.series-group{width:100%}.series-group .bgrid{margin-top:0}
 </style>
 <script defer src="https://derev-studio.github.io/photo-gallery/analytics-client.js"></script>
 <script defer src="https://derev-studio.github.io/photo-gallery/counter.js" data-site="derevyashkin-writer"></script>
@@ -829,14 +830,15 @@
 <section id="books">
   <div class="shd">
     <span class="slbl">Библиография</span>
-    <h2>Мои <em>книги</em></h2>
-    <p class="ssub">Нажмите на книгу — откроется её страница</p>
+    <h2>Книги <em>и серии</em></h2>
+    <p class="ssub">Ищите по названию, теме или откройте серию. Нажатие на книгу ведёт на её подтверждённую страницу публикации.</p>
   </div>
   <div class="book-search">
     <input id="bookSearch" type="search" placeholder="🔎 Найти книгу по названию или теме…" oninput="searchBooks(this.value)" aria-label="Поиск книг">
   </div>
   <div class="fbar series-strip">
-    <button class="fbtn act" onclick="filterBooks('all',this)">Все</button>
+    <button class="fbtn act" onclick="filterBooks('all',this)">Все книги</button>
+    <button class="fbtn" onclick="filterBooks('series',this)">📚 Серии</button>
     <button class="fbtn" onclick="filterBooks('rating',this)">⭐ Лучшие по рейтингу</button>
     <button class="fbtn" onclick="filterBooks('Психология',this)">Психология</button>
     <button class="fbtn" onclick="filterBooks('Романтика',this)">Романтика</button>
@@ -967,6 +969,13 @@ const B=[
   {t:"Путешествие к оранжевым звёздам",g:"Приключения",r:null,v:null,f:false,c:null,u:null,x:"https://kartaslov.ru/книги/Александр_Деревяшкин_Путешествие_к_оранжевым_звёздам",d:"Космические приключения, дружба, юмор и фантастика."},
 ];
 
+const SERIES=[
+  {name:"Путешествие за здоровьем",books:["Планета отравленных","С он","Завтрак на траве","Движение по параболе","Хлебное прозрение","Сладкий искуситель"]},
+  {name:"Психология Александра Деревяшкина",books:["Тихое слово","Обмануть депрессию","Ваше мышление","Обними одиночество"]}
+];
+const SERIES_BY_TITLE={};
+SERIES.forEach(s=>s.books.forEach((t,i)=>SERIES_BY_TITLE[t]={name:s.name,pos:i+1}));
+
 const BASE="https://cdn.litres.ru/pub/c/cover_h400/";
 const LITRES="https://www.litres.ru/book/aleksandr-derevyashkin-32679463/";
 const st=r=>{const s=Math.round(r);return'★'.repeat(s)+'☆'.repeat(5-s)};
@@ -981,7 +990,7 @@ function filterBooks(f,btn){
 }
 
 function getFilt(){
-  let list=cf==='all'?B:(cf==='free'?B.filter(b=>b.f):(cf==='rating'?[...B].sort((a,b)=>b.r-a.r||b.v-a.v):B.filter(b=>b.g===cf)));
+  let list=cf==='all'?B:(cf==='series'?B.filter(b=>SERIES_BY_TITLE[b.t]):(cf==='free'?B.filter(b=>b.f):(cf==='rating'?[...B].sort((a,b)=>(b.r??0)-(a.r??0)||(b.v??0)-(a.v??0)):B.filter(b=>b.g===cf))));
   if(bookQuery){
     const q=bookQuery.toLowerCase();
     list=list.filter(b=>(b.t+' '+b.g+' '+b.d).toLowerCase().includes(q));
@@ -990,11 +999,9 @@ function getFilt(){
 }
 function searchBooks(q){bookQuery=q.trim();render();}
 
-function render(){
-  const grid=document.getElementById('booksGrid');
-  const filt=getFilt();
-  const show=filt;
-  grid.innerHTML=show.map((b,i)=>`
+function bookCard(b,i,seriesInfo){
+  const badge=seriesInfo ? `<div class="bgenre">№ ${seriesInfo.pos} · ${seriesInfo.name}</div>` : `<div class="bgenre">${b.g}</div>`;
+  return `
     <div class="bcard" style="animation-delay:${(i%6)*0.06}s" onclick="window.open(b.x||(LITRES+b.u+'/'), '_blank', 'noopener')" role="link" tabindex="0">
       <div class="bcover">
         <img src="${b.c ? BASE+b.c+'.jpg' : ''}" alt="${b.t}" loading="lazy"
@@ -1003,12 +1010,31 @@ function render(){
       </div>
       <div class="binfo">
         <div class="btitle">${b.t}</div>
-        <div class="bgenre">${b.g}</div>
+        ${badge}
         ${b.r!=null ? `<div class="brating">${st(b.r)} ${b.r} (${b.v})</div>` : ''}
       </div>
-    </div>`).join('');
+    </div>`;
 }
-
+function render(){
+  const grid=document.getElementById('booksGrid');
+  if(cf==='series' && !bookQuery){
+    grid.className='series-catalog';
+    grid.innerHTML=SERIES.map(s=>{
+      const books=s.books.map(t=>B.find(b=>b.t===t)).filter(Boolean);
+      return `<div class="series-group">
+        <div class="shd" style="margin:18px 0 20px;text-align:left">
+          <span class="slbl">Серия · ${books.length} книг</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,4vw,2.5rem);margin:4px 0 0">${s.name}</h3>
+        </div>
+        <div class="bgrid">${books.map((b,i)=>bookCard(b,i,{name:s.name,pos:i+1})).join('')}</div>
+      </div>`;
+    }).join('');
+    return;
+  }
+  grid.className='bgrid';
+  const show=getFilt();
+  grid.innerHTML=show.map((b,i)=>bookCard(b,i,SERIES_BY_TITLE[b.t])).join('');
+}
 
 render();
 
