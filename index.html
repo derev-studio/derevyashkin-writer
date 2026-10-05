@@ -1076,7 +1076,7 @@ function searchBooks(q){bookQuery=q.trim();render();}
 function bookCard(b,i,seriesInfo){
   const badge=seriesInfo ? `<div class="bgenre">№ ${seriesInfo.pos} · ${seriesInfo.name}</div>` : `<div class="bgenre">${b.g}</div>`;
   return `
-    <div class="bcard" style="animation-delay:${(i%6)*0.06}s" onclick="window.open(b.x||(LITRES+b.u+'/'), '_blank', 'noopener')" role="link" tabindex="0">
+    <a class="bcard" href="${b.x||(LITRES+b.u+'/')}" target="_blank" rel="noopener" style="animation-delay:${(i%6)*0.06}s">
       <div class="bcover">
         <img src="${b.c ? BASE+b.c+'.jpg' : ''}" alt="${b.t}" loading="lazy"
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
@@ -1087,7 +1087,7 @@ function bookCard(b,i,seriesInfo){
         ${badge}
         ${b.r!=null ? `<div class="brating">${st(b.r)} ${b.r} (${b.v})</div>` : ''}
       </div>
-    </div>`;
+    </a>`;
 }
 function render(){
   const grid=document.getElementById('booksGrid');
