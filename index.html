@@ -5,7 +5,7 @@
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({"gtm.start":new Date().getTime(),event:"gtm.js"});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src="https://www.googletagmanager.com/gtm.js?id="+i+dl;f.parentNode.insertBefore(j,f);})(window,document,"script","dataLayer","GTM-TCJQ8R2P");</script>
 <!-- End Google Tag Manager -->
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Официальный сайт писателя Александра Деревяшкина. 69 книг: проза, психология, романтика, приключения, юмор и авторские рассказы."><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="https://derev-studio.github.io/derevyashkin-writer/">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Официальный сайт писателя Александра Деревяшкина. 71 книга: проза, психология, романтика, приключения, юмор и авторские рассказы."><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="https://derev-studio.github.io/derevyashkin-writer/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:title" content="Александр Деревяшкин — писатель | Книги и рассказы">
@@ -164,6 +164,10 @@
     h1{font-size:2.3rem}
   }
 .series-catalog{display:flex;flex-direction:column;gap:42px}.series-group{width:100%}.series-group .bgrid{margin-top:0}
+/* прожектор под курсором */
+#spot{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(560px circle at var(--sx,50%) var(--sy,0%),var(--glow),transparent 70%);opacity:0;transition:opacity .5s ease}
+body.lit #spot{opacity:1}
+body{position:relative}
 </style>
 <script defer src="https://derev-studio.github.io/photo-gallery/analytics-client.js"></script>
 <script defer src="https://derev-studio.github.io/photo-gallery/counter.js" data-site="derevyashkin-writer"></script>
@@ -748,6 +752,7 @@
 </script>
 </head>
 <body>
+<div id="spot" aria-hidden="true"></div>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TCJQ8R2P" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
@@ -782,7 +787,7 @@
     <p class="tagline">«Трудно найти слова, когда действительно есть что сказать…»</p>
     <p class="bio-short">Писатель мирового уровня. Книги наполнены мудростью, искренностью, юмором и добротой.<br>Израиль · 69 книг · ЛитРес</p>
     <div class="hero-stats">
-      <div class="stat"><span class="stat-num">69</span><span class="stat-label">Книг</span></div>
+      <div class="stat"><span class="stat-num" id="bookCount">71</span><span class="stat-label">Книг</span></div>
     </div>
     <div class="hero-cta">
       <a href="#books" class="btn-p">📚 Смотреть книги</a>
@@ -1076,6 +1081,10 @@ render();
 
 
 
+
+(function(){var el=document.getElementById('bookCount');if(el&&typeof B!=='undefined'){el.textContent=B.length;}})();
+
+(function(){var fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches;var calm=window.matchMedia('(prefers-reduced-motion:reduce)').matches;if(!fine||calm)return;var raf=0,px=0,py=0,root=document.documentElement;function draw(){raf=0;root.style.setProperty('--sx',px+'px');root.style.setProperty('--sy',py+'px');}window.addEventListener('pointermove',function(e){if(e.pointerType!=='mouse')return;px=e.clientX;py=e.clientY;document.body.classList.add('lit');if(!raf)raf=requestAnimationFrame(draw);},{passive:true});document.addEventListener('mouseleave',function(){document.body.classList.remove('lit');});})();
 </script>
 
 </body>
