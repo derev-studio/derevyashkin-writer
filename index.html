@@ -210,10 +210,13 @@
   @keyframes pulse{0%,100%{opacity:0.45}50%{opacity:1}}
 
   @media(max-width:768px){
-    header{padding:13px 18px}
-    nav a:not(.nav-kofi){display:none}
+    header{padding:10px 12px;flex-wrap:wrap;gap:8px}
+    .logo{width:100%;text-align:center;font-size:1.05rem}
+    nav{width:100%;display:flex;justify-content:center;gap:2px;overflow-x:auto}
+    nav a{display:block!important;flex:0 0 auto;font-size:.66rem;padding:6px 8px}
+    nav a[href="#video-books"],nav a[href="#archive-works"]{display:none!important}
     section{padding:60px 18px}
-    .hero{padding:96px 18px 86px}
+    .hero{padding:118px 18px 86px}
     .hero-stats{gap:18px}
     .stat-num{font-size:2rem}
     .bgrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px}
@@ -942,7 +945,7 @@
     <div class="stitle">Каждая чашка кофе — новая книга</div>
     <p class="stxt">Если книги вам нравятся — поддержите Александра Деревяшкина на Ko-fi. Каждый взнос помогает создавать новые произведения.</p>
     <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px">
-      <a href="https://ko-fi.com/X8X71WAGRF" target="_blank" class="btn-kofi">☕ Поддержать на Ko-fi</a>
+      <a href="https://ko-fi.com/X8X71WAGRF" target="_blank" rel="noopener" class="btn-kofi">☕ Поддержать на Ko-fi</a>
     </div>
   </div>
 </section>
