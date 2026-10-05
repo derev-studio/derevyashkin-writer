@@ -38,11 +38,13 @@
   .tbtn[data-t="forest"]{background:radial-gradient(circle at 40% 40%,#1a5a2a,#080f0a)}
 
   /* HEADER */
-  header{position:fixed;top:0;width:100%;z-index:100;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(0,0,0,0.78),transparent);backdrop-filter:blur(6px)}
-  .logo{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:var(--a2);text-decoration:none;letter-spacing:0.03em;transition:color 1s}
-  nav{display:flex;gap:24px;align-items:center}
-  nav a{color:var(--mu);text-decoration:none;font-size:0.78rem;letter-spacing:0.11em;text-transform:uppercase;transition:color 0.3s}
-  nav a:hover{color:var(--a2)}
+  header{position:fixed;top:0;width:100%;z-index:100;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px;background:color-mix(in srgb,var(--bg2) 92%,#000 8%);border-bottom:1px solid var(--a1);box-shadow:0 10px 30px rgba(0,0,0,.32);backdrop-filter:blur(14px)}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;color:var(--a2);text-decoration:none;letter-spacing:0.03em;white-space:nowrap;text-shadow:0 1px 10px var(--adim)}
+  nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+  nav a{color:var(--tx);text-decoration:none;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;padding:9px 12px;border:1px solid var(--brd);border-radius:999px;background:var(--bg3);font-weight:500;transition:all .25s}
+  nav a:hover{color:var(--bt);background:var(--a2);border-color:var(--a2);transform:translateY(-1px)}
+  .nav-empire{background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--bt)!important;border-color:var(--a2)!important;font-weight:700}
+  .nav-empire:hover{filter:brightness(1.08);transform:translateY(-1px)}
   .nav-kofi{padding:6px 16px;background:#ff5e5b;color:#fff!important;border-radius:2px;letter-spacing:0.06em!important}
   .nav-kofi:hover{opacity:0.85;transform:translateY(-1px)}
 
@@ -210,13 +212,15 @@
   @keyframes pulse{0%,100%{opacity:0.45}50%{opacity:1}}
 
   @media(max-width:768px){
-    header{padding:10px 12px;flex-wrap:wrap;gap:8px}
-    .logo{width:100%;text-align:center;font-size:1.05rem}
-    nav{width:100%;display:flex;justify-content:center;gap:2px;overflow-x:auto}
-    nav a{display:block!important;flex:0 0 auto;font-size:.66rem;padding:6px 8px}
+    header{padding:9px 10px 10px;flex-wrap:wrap;gap:7px;background:color-mix(in srgb,var(--bg2) 96%,#000 4%)}
+    .logo{width:100%;text-align:center;font-size:1.12rem}
+    nav{width:100%;display:flex;justify-content:flex-start;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+    nav::-webkit-scrollbar{display:none}
+    nav a{display:block!important;flex:0 0 auto;font-size:.66rem;padding:7px 10px}
     nav a[href="#video-books"],nav a[href="#archive-works"]{display:none!important}
+    .nav-empire{order:-1}
     section{padding:60px 18px}
-    .hero{padding:118px 18px 86px}
+    .hero{padding:128px 18px 86px}
     .hero-stats{gap:18px}
     .stat-num{font-size:2rem}
     .bgrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px}
@@ -835,6 +839,7 @@
 <header>
   <a href="#home" class="logo">Александр Деревяшкин</a>
   <nav>
+    <a href="https://derev-studio.github.io/" class="nav-empire">← В Империю</a>
     <a href="#books">Книги</a><a href="#video-books">Видео</a><a href="#audio-books">Аудио</a><a href="#archive-works">Архив</a>
     <a href="#free-reading">Читать бесплатно</a>
     <a href="#support">Поддержка</a>
