@@ -1075,8 +1075,40 @@ function render(){
     }).join('');
     return;
   }
-  grid.className='bgrid';
   const show=getFilt();
+  if(cf==='all' && !bookQuery){
+    grid.className='series-catalog';
+    const used=new Set();
+    let html='';
+    SERIES.forEach(s=>{
+      const books=s.books.map(t=>B.find(b=>b.t===t)).filter(Boolean);
+      books.forEach(b=>used.add(b.t));
+      if(!books.length) return;
+      html+=`<div class="series-group">
+        <div class="shd" style="margin:18px 0 20px;text-align:left">
+          <span class="slbl">Серия · ${books.length} книг</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,4vw,2.5rem);margin:4px 0 0">${s.name}</h3>
+        </div>
+        <div class="bgrid">${books.map((b,i)=>bookCard(b,i,{name:s.name,pos:i+1})).join('')}</div>
+      </div>`;
+    });
+    const rest=B.filter(b=>!used.has(b.t));
+    const byGenre={};
+    rest.forEach(b=>{(byGenre[b.g]=byGenre[b.g]||[]).push(b)});
+    Object.keys(byGenre).sort((a,b)=>byGenre[b].length-byGenre[a].length).forEach(g=>{
+      const books=byGenre[g];
+      html+=`<div class="series-group">
+        <div class="shd" style="margin:18px 0 20px;text-align:left">
+          <span class="slbl">Тема · ${books.length} книг</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,4vw,2.5rem);margin:4px 0 0">${g}</h3>
+        </div>
+        <div class="bgrid">${books.map((b,i)=>bookCard(b,i,null)).join('')}</div>
+      </div>`;
+    });
+    grid.innerHTML=html;
+    return;
+  }
+  grid.className='bgrid';
   grid.innerHTML=show.map((b,i)=>bookCard(b,i,SERIES_BY_TITLE[b.t])).join('');
 }
 
