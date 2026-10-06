@@ -1051,7 +1051,7 @@ function bookCard(b,i,seriesInfo){
       <div class="binfo">
         <div class="btitle">${b.t}</div>
         ${badge}
-        ${b.r!=null ? `<div class="brating">${st(b.r)} ${b.r} (${b.v})</div>` : ''}
+        ${(b.r!=null && (b.v||0)>0) ? `<div class="brating">${st(b.r)} ${b.r} (${b.v})</div>` : ((b.v||0)>0 ? `<div class="brating">${st(b.r)} ${b.r} (${b.v})</div>` : (b.f ? '<div class="brating">бесплатно</div>' : '<div class="brating">новинка</div>'))}
       </div>
     </a>`;
   if(b.t==='Приключения Деревяшкина'){
